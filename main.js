@@ -21,7 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
     .catch((err) => {
-      console.log('Whoops');
+      console.log(err);
+    });
+// using cors-proxy as a temporary work around
+  const krackenPromise = fetch('http://cors-proxy.htmldriven.com/?url=https://api.kraken.com/0/public/Depth?pair=XETHXXBT&count=10');
+  krackenPromise
+    .then(response => response.json())
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
       console.log(err);
     });
 });
