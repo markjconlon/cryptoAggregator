@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const quadrigaSells = document.querySelector('#QS');
   const liquiBuys = document.querySelector('#LB');
   const liquiSells = document.querySelector('#LS');
+  const trade = document.querySelector('#trade');
+  const amount = document.querySelector('#amount');
   const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
   const quadrigaPromise = fetch('https://api.quadrigacx.com/public/orders?book=eth_btc&group=1');
   var liquiTen = {}
@@ -59,16 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const exTwoBuy = exchangeTwo.buys[0][0]
       const exTwoSell = exchangeTwo.sells[0][0]
       if (delta(exTwoSell, exOneBuy)) {
-        console.log("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy);
+        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy));
       } else if (delta(exOneSell, exTwoBuy)) {
-        console.log("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy);
+        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy));
       } else {
-        console.log("No Profitable Trades")
+        trade.appendChild(document.createTextNode("No Profitable Trades"));
       }
     }
 
     function delta(tradeOne, tradeTwo) {
-      const diff = 0.02;
+      //0.02 is 1.54% profit as you lose 0.2 to liqui and 0.26 to quadriga
+      const diff = 0.0146;
       let tradeOneNum = parseFloat(tradeOne);
       let tradeTwoNum = parseFloat(tradeTwo);
       const average = (tradeOneNum + tradeTwoNum) / 2;
