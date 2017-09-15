@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const quadrigaBuys = document.querySelector('#KB');
-  const quadrigaSells = document.querySelector('#KS');
+  const quadrigaBuys = document.querySelector('#QB');
+  const quadrigaSells = document.querySelector('#QS');
   const liquiBuys = document.querySelector('#LB');
   const liquiSells = document.querySelector('#LS');
   const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
