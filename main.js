@@ -47,8 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
         li.appendChild(document.createTextNode(sell));
         quadrigaBuys.appendChild(li);
       })
+      isProfit(liquiTen, quadrigaTen);
     })
     .catch((err) => {
       console.log(err);
     });
+
+    function isProfit(exchangeOne, exchangeTwo) {
+      const exOneBuy = exchangeOne.buys[0][0]
+      const exOneSell = exchangeOne.sells[0][0]
+      const exTwoBuy = exchangeTwo.buys[0][0]
+      const exTwoSell = exchangeTwo.sells[0][0]
+      if (delta(exTwoSell, exOneBuy)) {
+        console.log("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy);
+      } else if (delta(exOneSell, exTwoBuy)) {
+        console.log("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy);
+      } else {
+        console.log("No Profitable Trades")
+      }
+    }
+
+    function delta(tradeOne, tradeTwo) {
+      const diff = 0.02;
+      let tradeOneNum = parseFloat(tradeOne);
+      let tradeTwoNum = parseFloat(tradeTwo);
+      const average = (tradeOneNum + tradeTwoNum) / 2;
+      if ((tradeOneNum - tradeTwoNum) / average >= diff) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 });
