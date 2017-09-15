@@ -56,21 +56,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function isProfit(exchangeOne, exchangeTwo) {
-      const exOneBuy = exchangeOne.buys[0][0]
-      const exOneSell = exchangeOne.sells[0][0]
-      const exTwoBuy = exchangeTwo.buys[0][0]
-      const exTwoSell = exchangeTwo.sells[0][0]
-      if (delta(exTwoSell, exOneBuy)) {
-        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy));
-      } else if (delta(exOneSell, exTwoBuy)) {
-        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell + " Buy Liqui at " + exOneBuy));
+      // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
+      const exOneSell = exchangeOne.buys[0];
+      const exOneBuy = exchangeOne.sells[0];
+      const exTwoSell = exchangeTwo.buys[0];
+      const exTwoBuy = exchangeTwo.sells[0];
+      if (delta(exTwoSell[0], exOneBuy[0])) {
+        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell[0] + " Buy Liqui at " + exOneBuy[0]));
+        if (exTwoSell[1] > exOneBuy[1]) {
+          amount.appendChild(document.createTextNode(exOneBuy[1]));
+        } else {
+          amount.appendChild(document.createTextNode(exTwoSell[1]));
+        }
+      } else if (delta(exOneSell[0], exTwoBuy[0])) {
+        trade.appendChild(document.createTextNode("Sell Liqui at " + exOneSell[0] + " Buy Quadriga at " + exTwoBuy[0]));
+        if (exOneSell[1] > exTwoBuy[1]) {
+          amount.appendChild(document.createTextNode(exTwoBuy[1]));
+        } else {
+          amount.appendChild(document.createTextNode(exOneSell[1]));
+        }
       } else {
         trade.appendChild(document.createTextNode("No Profitable Trades"));
       }
     }
 
     function delta(tradeOne, tradeTwo) {
-      //0.02 is 1.54% profit as you lose 0.2 to liqui and 0.26 to quadriga
+      //0.0146 is 1% profit as you lose 0.2 to liqui and 0.26 to quadriga
       const diff = 0.0146;
       let tradeOneNum = parseFloat(tradeOne);
       let tradeTwoNum = parseFloat(tradeTwo);
