@@ -5,10 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const liquiSells = document.querySelector('#LS');
   const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
   const quadrigaPromise = fetch('https://api.quadrigacx.com/public/orders?book=eth_btc&group=1');
+  var liquiTen = {}
+  var quadrigaTen = {}
 
   liquiPromise
     .then(data => data.json())
     .then((data) => {
+      liquiTen["buys"] = data.eth_btc.bids;
+      liquiTen["sells"] = data.eth_btc.asks;
       const bids = (data.eth_btc.bids).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
       for (let i = 0; i < bids.length; i++) {
         const li = document.createElement('li');
@@ -29,8 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
   quadrigaPromise
     .then(response => response.json())
     .then((response) => {
-      const sells = response.sell.splice(0,10).map(sell => `${sell.rate}BTC | QTY = ${sell.amount}`);
-      const buys = response.buy.splice(0,10).map(buy => `${buy.rate}BTC | QTY = ${buy.amount}`);
+      quadrigaTen["buys"] = response.buy.splice(0,10).map(buy => [buy.rate, buy.amount])
+      quadrigaTen["sells"] = response.sell.splice(0,10).map(sell => [sell.rate, sell.amount])
+      const buys = quadrigaTen["buys"].map(buy => `${buy[0]}BTC | QTY = ${buy[1]}`);
+      const sells = quadrigaTen["sells"].map(sell => `${sell[0]}BTC | QTY = ${sell[1]}`);
       sells.forEach(sell => {
         const li = document.createElement('li');
         li.appendChild(document.createTextNode(sell));
