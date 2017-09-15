@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const krakenBuys = document.querySelector('#KB');
-  const krakenSells = document.querySelector('#KS');
+  const quadrigaBuys = document.querySelector('#KB');
+  const quadrigaSells = document.querySelector('#KS');
   const liquiBuys = document.querySelector('#LB');
   const liquiSells = document.querySelector('#LS');
-  const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10', { mode: 'cors' });
+  const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
+  const quadrigaPromise = fetch('https://api.quadrigacx.com/public/orders?book=eth_btc&group=1');
+
   liquiPromise
     .then(data => data.json())
     .then((data) => {
@@ -23,12 +25,22 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch((err) => {
       console.log(err);
     });
-  // using cors-proxy as a temporary work around
-  const krakenPromise = fetch('http://cors-proxy.htmldriven.com/?url=https://api.kraken.com/0/public/Depth?pair=XETHXXBT&count=10');
-  krakenPromise
+  // switched to QuadrigaCX
+  quadrigaPromise
     .then(response => response.json())
     .then((response) => {
-      console.log(response);
+      const sells = response.sell.splice(0,10).map(sell => `${sell.rate}BTC | QTY = ${sell.amount}`);
+      const buys = response.buy.splice(0,10).map(buy => `${buy.rate}BTC | QTY = ${buy.amount}`);
+      sells.forEach(sell => {
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(sell));
+        quadrigaSells.appendChild(li);
+      })
+      buys.forEach(sell => {
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(sell));
+        quadrigaBuys.appendChild(li);
+      })
     })
     .catch((err) => {
       console.log(err);
