@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const sells = quadrigaTen["sells"].map(sell => `${sell[0]}BTC | QTY = ${sell[1]}`);
       toResultsList(sells, quadrigaSells);
       toResultsList(buys, quadrigaBuys);
-      isProfit(liquiTen, quadrigaTen);
+      setTimeout(function(){
+        isProfit(liquiTen, quadrigaTen);
+      }, 500)
     })
     .catch((err) => {
       console.log(err);
@@ -52,6 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           amount.appendChild(document.createTextNode(exTwoSell[1]));
         }
+        document.querySelector('ul#LS li:nth-child(2)').classList.add('highlight');
+        document.querySelector('ul#QB li:nth-child(2)').classList.add('highlight');
       } else if (delta(exOneSell[0], exTwoBuy[0])) {
         trade.appendChild(document.createTextNode("Sell Liqui at " + exOneSell[0] + " Buy Quadriga at " + exTwoBuy[0]));
         if (exOneSell[1] > exTwoBuy[1]) {
@@ -59,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           amount.appendChild(document.createTextNode(exOneSell[1]));
         }
+        document.querySelector('ul#QS li:nth-child(2)').classList.add('highlight');
+        document.querySelector('ul#LB li:nth-child(2)').classList.add('highlight');
       } else {
         trade.appendChild(document.createTextNode("No Profitable Trades"));
       }

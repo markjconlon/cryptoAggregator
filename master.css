@@ -70,3 +70,9 @@ span.exAction{
   font-weight: 500;
   text-decoration: underline;
 }
+li.highlight{
+  background-color: steelblue;
+  color: whitesmoke;
+  padding: 0.3em;
+  transform: scale(1.1);
+}
