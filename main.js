@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const exTwoSell = exchangeTwo.buys[0];
       const exTwoBuy = exchangeTwo.sells[0];
       if (delta(exTwoSell[0], exOneBuy[0])) {
-        trade.appendChild(document.createTextNode("Sell Quadriga at " + exTwoSell[0] + " Buy Liqui at " + exOneBuy[0]));
+        trade.appendChild(document.createTextNode("Sell Quadriga @ " + exTwoSell[0] + " Buy Liqui @ " + exOneBuy[0]));
         if (exTwoSell[1] > exOneBuy[1]) {
           amount.appendChild(document.createTextNode(exOneBuy[1]));
         } else {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('ul#LS li:nth-child(2)').classList.add('highlight');
         document.querySelector('ul#QB li:nth-child(2)').classList.add('highlight');
       } else if (delta(exOneSell[0], exTwoBuy[0])) {
-        trade.appendChild(document.createTextNode("Sell Liqui at " + exOneSell[0] + " Buy Quadriga at " + exTwoBuy[0]));
+        trade.appendChild(document.createTextNode("Sell Liqui @ " + exOneSell[0] + " Buy Quadriga @ " + exTwoBuy[0]));
         if (exOneSell[1] > exTwoBuy[1]) {
           amount.appendChild(document.createTextNode(exTwoBuy[1]));
         } else {
