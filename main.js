@@ -16,17 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
       liquiTen["buys"] = data.eth_btc.bids;
       liquiTen["sells"] = data.eth_btc.asks;
       const bids = (data.eth_btc.bids).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
-      for (let i = 0; i < bids.length; i++) {
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(bids[i]));
-        liquiBuys.appendChild(li);
-      }
       const asks = (data.eth_btc.asks).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
-      for (let i = 0; i < asks.length; i++) {
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(asks[i]));
-        liquiSells.appendChild(li);
-      }
+      toResultsList(bids, liquiBuys);
+      toResultsList(asks, liquiSells);
     })
     .catch((err) => {
       console.log(err);
@@ -39,16 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
       quadrigaTen["sells"] = response.sell.splice(0,10).map(sell => [sell.rate, sell.amount])
       const buys = quadrigaTen["buys"].map(buy => `${buy[0]}BTC | QTY = ${buy[1]}`);
       const sells = quadrigaTen["sells"].map(sell => `${sell[0]}BTC | QTY = ${sell[1]}`);
-      sells.forEach(sell => {
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(sell));
-        quadrigaSells.appendChild(li);
-      })
-      buys.forEach(sell => {
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(sell));
-        quadrigaBuys.appendChild(li);
-      })
+      toResultsList(sells, quadrigaSells);
+      toResultsList(buys, quadrigaBuys);
       isProfit(liquiTen, quadrigaTen);
     })
     .catch((err) => {
@@ -91,5 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         return false;
       }
+    }
+
+    function toResultsList(arr, list){
+      arr.forEach(item => {
+        const li = document.createElement('li');
+        li.appendChild(document.createTextNode(item));
+        list.appendChild(li);
+      })
     }
 });
