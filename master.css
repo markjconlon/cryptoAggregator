@@ -60,6 +60,17 @@ h1 {
   color: white;
   font-size: 1.25em;
 }
+footer{
+  text-align: center;
+  background-color: black;
+  color: white;
+  font-size: 1em;
+  display: flex;
+  justify-content: space-around;
+}
+footer h2{
+  width: 80%;
+}
 .sellsBuys{
   display: flex;
   justify-content: space-around;
