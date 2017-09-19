@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function delta(tradeOne, tradeTwo) {
       //0.0146 is 1% profit as you lose 0.2 to liqui and 0.26 to quadriga
-      const diff = 0.0146;
+      const diff = 0.0096;
       let tradeOneNum = parseFloat(tradeOne);
       let tradeTwoNum = parseFloat(tradeTwo);
       const average = (tradeOneNum + tradeTwoNum) / 2;
