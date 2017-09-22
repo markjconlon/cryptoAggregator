@@ -3,12 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const quadrigaSells = document.querySelector('#QS');
   const liquiBuys = document.querySelector('#LB');
   const liquiSells = document.querySelector('#LS');
+  const poloniexBuys = document.querySelector('#PB');
+  const poloniexSells = document.querySelector('#PS');
   const trade = document.querySelector('#trade');
   const amount = document.querySelector('#amount');
   const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
   const quadrigaPromise = fetch('https://api.quadrigacx.com/public/orders?book=eth_btc&group=1');
+  const poloniexPromise = fetch('https://poloniex.com/public?command=returnOrderBook&currencyPair=BTC_ETH&depth=10');
   var liquiTen = {}
   var quadrigaTen = {}
+  var poloniexTen = {}
 
   liquiPromise
     .then(data => data.json())
@@ -40,6 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch((err) => {
       console.log(err);
     });
+
+  poloniexPromise
+  .then(response => response.json())
+  .then((response) => {
+    poloniexTen["buys"] = response.bids;
+    poloniexTen["sells"] = response.asks;
+    const poloniexBids = (response.bids).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
+    const poloniexAsks = (response.asks).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
+    toResultsList(poloniexBids, poloniexBuys);
+    toResultsList(poloniexAsks, poloniexSells);
+  });
 
     function isProfit(exchangeOne, exchangeTwo) {
       // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
