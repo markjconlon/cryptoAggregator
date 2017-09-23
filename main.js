@@ -54,55 +54,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const poloniexAsks = (response.asks).map(info => `${info[0]}BTC | QTY = ${info[1]}`);
     toResultsList(poloniexBids, poloniexBuys);
     toResultsList(poloniexAsks, poloniexSells);
+  })
+  .catch((err) => {
+    console.log(err);
   });
 
-    function isProfit(exchangeOne, exchangeTwo) {
-      // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
-      const exOneSell = exchangeOne.buys[0];
-      const exOneBuy = exchangeOne.sells[0];
-      const exTwoSell = exchangeTwo.buys[0];
-      const exTwoBuy = exchangeTwo.sells[0];
-      if (delta(exTwoSell[0], exOneBuy[0])) {
-        trade.appendChild(document.createTextNode("Sell Quadriga @ " + exTwoSell[0] + " Buy Liqui @ " + exOneBuy[0]));
-        if (exTwoSell[1] > exOneBuy[1]) {
-          amount.appendChild(document.createTextNode(exOneBuy[1]));
-        } else {
-          amount.appendChild(document.createTextNode(exTwoSell[1]));
-        }
-        document.querySelector('ul#LS li:nth-child(2)').classList.add('highlight');
-        document.querySelector('ul#QB li:nth-child(2)').classList.add('highlight');
-      } else if (delta(exOneSell[0], exTwoBuy[0])) {
-        trade.appendChild(document.createTextNode("Sell Liqui @ " + exOneSell[0] + " Buy Quadriga @ " + exTwoBuy[0]));
-        if (exOneSell[1] > exTwoBuy[1]) {
-          amount.appendChild(document.createTextNode(exTwoBuy[1]));
-        } else {
-          amount.appendChild(document.createTextNode(exOneSell[1]));
-        }
-        document.querySelector('ul#QS li:nth-child(2)').classList.add('highlight');
-        document.querySelector('ul#LB li:nth-child(2)').classList.add('highlight');
+  function isProfit(exchangeOne, exchangeTwo) {
+    // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
+    const exOneSell = exchangeOne.buys[0];
+    const exOneBuy = exchangeOne.sells[0];
+    const exTwoSell = exchangeTwo.buys[0];
+    const exTwoBuy = exchangeTwo.sells[0];
+    if (delta(exTwoSell[0], exOneBuy[0])) {
+      trade.appendChild(document.createTextNode("Sell Quadriga @ " + exTwoSell[0] + " Buy Liqui @ " + exOneBuy[0]));
+      if (exTwoSell[1] > exOneBuy[1]) {
+        amount.appendChild(document.createTextNode(exOneBuy[1]));
       } else {
-        trade.appendChild(document.createTextNode("No Profitable Trades"));
+        amount.appendChild(document.createTextNode(exTwoSell[1]));
       }
-    }
-
-    function delta(tradeOne, tradeTwo) {
-      //0.0146 is 1% profit as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
-      const diff = 0.0056;
-      let tradeOneNum = parseFloat(tradeOne);
-      let tradeTwoNum = parseFloat(tradeTwo);
-      const average = (tradeOneNum + tradeTwoNum) / 2;
-      if ((tradeOneNum - tradeTwoNum) / average >= diff) {
-        return true;
+      document.querySelector('ul#LS li:nth-child(2)').classList.add('highlight');
+      document.querySelector('ul#QB li:nth-child(2)').classList.add('highlight');
+    } else if (delta(exOneSell[0], exTwoBuy[0])) {
+      trade.appendChild(document.createTextNode("Sell Liqui @ " + exOneSell[0] + " Buy Quadriga @ " + exTwoBuy[0]));
+      if (exOneSell[1] > exTwoBuy[1]) {
+        amount.appendChild(document.createTextNode(exTwoBuy[1]));
       } else {
-        return false;
+        amount.appendChild(document.createTextNode(exOneSell[1]));
       }
+      document.querySelector('ul#QS li:nth-child(2)').classList.add('highlight');
+      document.querySelector('ul#LB li:nth-child(2)').classList.add('highlight');
+    } else {
+      trade.appendChild(document.createTextNode("No Profitable Trades"));
     }
+  }
 
-    function toResultsList(arr, list){
-      arr.forEach(item => {
-        const li = document.createElement('li');
-        li.appendChild(document.createTextNode(item));
-        list.appendChild(li);
-      })
+  function delta(tradeOne, tradeTwo) {
+    //0.0146 is 1% profit as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
+    const diff = 0.0056;
+    let tradeOneNum = parseFloat(tradeOne);
+    let tradeTwoNum = parseFloat(tradeTwo);
+    const average = (tradeOneNum + tradeTwoNum) / 2;
+    if ((tradeOneNum - tradeTwoNum) / average >= diff) {
+      return true;
+    } else {
+      return false;
     }
+  }
+
+  function toResultsList(arr, list){
+    arr.forEach(item => {
+      const li = document.createElement('li');
+      li.appendChild(document.createTextNode(item));
+      list.appendChild(li);
+    })
+  }
 });
