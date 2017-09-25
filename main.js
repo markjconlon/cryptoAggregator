@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const poloniexSells = document.querySelector('#PS');
   const trade = document.querySelector('#trade');
   const amount = document.querySelector('#amount');
+  const target = document.querySelector('#target');
+  const current = document.querySelector('#current');
   const liquiPromise = fetch('https://api.liqui.io/api/3/depth/eth_btc?limit=10');
   const quadrigaPromise = fetch('https://api.quadrigacx.com/public/orders?book=eth_btc&group=1');
   const poloniexPromise = fetch('https://poloniex.com/public?command=returnOrderBook&currencyPair=BTC_ETH&depth=10');
@@ -71,9 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let maxSell = [exOneSell, exTwoSell, exThreeSell].sort((a, b) => (a.trade[0] < b.trade[0]) ? 1 : -1 );
     // sorts the array placing the lowest buy at position [0]
     let minBuy = [exOneBuy, exTwoBuy, exThreeBuy].sort((a, b) => (a.trade[0] > b.trade[0]) ? 1 : -1 );;
-    
+
     if (delta(maxSell[0].trade[0], minBuy[0].trade[0])) {
       trade.appendChild(document.createTextNode("Sell " + maxSell[0].exchangeName +  " @ " + maxSell[0].trade[0] + " Buy " + minBuy[0].exchangeName + " @ " + minBuy[0].trade[0]));
+      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - parseFloat(minBuy[0].trade[0])) / parseFloat(maxSell[0].trade[0]) }`));
+      target.appendChild(document.createTextNode("0.0061"));
       if (maxSell[0].trade[1] < minBuy[0].trade[1]) {
         amount.appendChild(document.createTextNode(maxSell[0].trade[1]));
       } else {
@@ -83,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('ul#' + minBuy[0].appendId + ' li:nth-child(2)').classList.add('highlight');
     } else {
       trade.appendChild(document.createTextNode("No Profitable Trades"));
+      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - parseFloat(minBuy[0].trade[0])) / parseFloat(maxSell[0].trade[0]) }`));
+      target.appendChild(document.createTextNode("0.0061"));
     }
   }
 
