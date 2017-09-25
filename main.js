@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
       toResultsList(sells, quadrigaSells);
       toResultsList(buys, quadrigaBuys);
       setTimeout(function(){
-        isProfit(liquiTen, quadrigaTen);
-      }, 500)
+        isProfit(liquiTen, quadrigaTen, poloniexTen);
+      }, 1000)
     })
     .catch((err) => {
       console.log(err);
@@ -59,38 +59,34 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(err);
   });
 
-  function isProfit(exchangeOne, exchangeTwo) {
+  function isProfit(exchangeOne, exchangeTwo, exchangeThree) {
     // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
-    const exOneSell = exchangeOne.buys[0];
-    const exOneBuy = exchangeOne.sells[0];
-    const exTwoSell = exchangeTwo.buys[0];
-    const exTwoBuy = exchangeTwo.sells[0];
-    if (delta(exTwoSell[0], exOneBuy[0])) {
-      trade.appendChild(document.createTextNode("Sell Quadriga @ " + exTwoSell[0] + " Buy Liqui @ " + exOneBuy[0]));
-      if (exTwoSell[1] > exOneBuy[1]) {
-        amount.appendChild(document.createTextNode(exOneBuy[1]));
+    const exOneSell = {"trade": exchangeOne.buys[0], "exchangeName": "Liqui", "appendId": liquiBuys};
+    const exOneBuy = {"trade": exchangeOne.sells[0], "exchangeName": "Liqui", "appendId": liquiSells};
+    const exTwoSell = {"trade": exchangeTwo.buys[0], "exchangeName": "QuadrigaCX", "appendId": quadrigaBuys};
+    const exTwoBuy = {"trade": exchangeTwo.sells[0], "exchangeName": "QuadrigaCX", "appendId": quadrigaSells};
+    const exThreeSell = {"trade": exchangeThree.buys[0], "exchangeName": "Poloniex", "appendId": poloniexBuys};
+    const exThreeBuy = {"trade": exchangeThree.sells[0], "exchangeName": "Poloniex", "appendId": poloniexSells};
+    // sorts the array placing the highest sell at position [0]
+    let maxSell = [exOneSell, exTwoSell, exThreeSell].sort((a, b) => (a.trade[0] < b.trade[0]) ? 1 : -1 );
+    // sorts the array placing the lowest buy at position [0]
+    let minBuy = [exOneBuy, exTwoBuy, exThreeBuy].sort((a, b) => (a.trade[0] > b.trade[0]) ? 1 : -1 );;
+    console.log(maxSell[0].trade[0], minBuy[0].trade[0]);
+    if (delta(maxSell[0].trade[0], minBuy[0].trade[0])) {
+      trade.appendChild(document.createTextNode("Sell " + maxSell[0].exchangeName +  " @ " + maxSell[0].trade[0] + " Buy " + minBuy[0].exchangeName + " @ " + minBuy[0].trade[0]));
+      if (true) {
+
       } else {
-        amount.appendChild(document.createTextNode(exTwoSell[1]));
+
       }
-      document.querySelector('ul#LS li:nth-child(2)').classList.add('highlight');
-      document.querySelector('ul#QB li:nth-child(2)').classList.add('highlight');
-    } else if (delta(exOneSell[0], exTwoBuy[0])) {
-      trade.appendChild(document.createTextNode("Sell Liqui @ " + exOneSell[0] + " Buy Quadriga @ " + exTwoBuy[0]));
-      if (exOneSell[1] > exTwoBuy[1]) {
-        amount.appendChild(document.createTextNode(exTwoBuy[1]));
-      } else {
-        amount.appendChild(document.createTextNode(exOneSell[1]));
-      }
-      document.querySelector('ul#QS li:nth-child(2)').classList.add('highlight');
-      document.querySelector('ul#LB li:nth-child(2)').classList.add('highlight');
     } else {
       trade.appendChild(document.createTextNode("No Profitable Trades"));
     }
   }
 
   function delta(tradeOne, tradeTwo) {
-    //0.0146 is 1% profit as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
-    const diff = 0.0056;
+    //0.0061 is .1% profit or greater depending on trades as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
+    const diff = 0.000001;
     let tradeOneNum = parseFloat(tradeOne);
     let tradeTwoNum = parseFloat(tradeTwo);
     const average = (tradeOneNum + tradeTwoNum) / 2;
