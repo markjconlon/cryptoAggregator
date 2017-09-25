@@ -61,24 +61,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function isProfit(exchangeOne, exchangeTwo, exchangeThree) {
     // Flip the Sells and Buys as we have to Buy the sell listing and sell to the buyer's listing
-    const exOneSell = {"trade": exchangeOne.buys[0], "exchangeName": "Liqui", "appendId": liquiBuys};
-    const exOneBuy = {"trade": exchangeOne.sells[0], "exchangeName": "Liqui", "appendId": liquiSells};
-    const exTwoSell = {"trade": exchangeTwo.buys[0], "exchangeName": "QuadrigaCX", "appendId": quadrigaBuys};
-    const exTwoBuy = {"trade": exchangeTwo.sells[0], "exchangeName": "QuadrigaCX", "appendId": quadrigaSells};
-    const exThreeSell = {"trade": exchangeThree.buys[0], "exchangeName": "Poloniex", "appendId": poloniexBuys};
-    const exThreeBuy = {"trade": exchangeThree.sells[0], "exchangeName": "Poloniex", "appendId": poloniexSells};
+    const exOneSell = {"trade": exchangeOne.buys[0], "exchangeName": "Liqui", "appendId": "LB"};
+    const exOneBuy = {"trade": exchangeOne.sells[0], "exchangeName": "Liqui", "appendId": "LS"};
+    const exTwoSell = {"trade": exchangeTwo.buys[0], "exchangeName": "QuadrigaCX", "appendId": "QB"};
+    const exTwoBuy = {"trade": exchangeTwo.sells[0], "exchangeName": "QuadrigaCX", "appendId": "QS"};
+    const exThreeSell = {"trade": exchangeThree.buys[0], "exchangeName": "Poloniex", "appendId": "PB"};
+    const exThreeBuy = {"trade": exchangeThree.sells[0], "exchangeName": "Poloniex", "appendId": "PS"};
     // sorts the array placing the highest sell at position [0]
     let maxSell = [exOneSell, exTwoSell, exThreeSell].sort((a, b) => (a.trade[0] < b.trade[0]) ? 1 : -1 );
     // sorts the array placing the lowest buy at position [0]
     let minBuy = [exOneBuy, exTwoBuy, exThreeBuy].sort((a, b) => (a.trade[0] > b.trade[0]) ? 1 : -1 );;
-    console.log(maxSell[0].trade[0], minBuy[0].trade[0]);
+    
     if (delta(maxSell[0].trade[0], minBuy[0].trade[0])) {
       trade.appendChild(document.createTextNode("Sell " + maxSell[0].exchangeName +  " @ " + maxSell[0].trade[0] + " Buy " + minBuy[0].exchangeName + " @ " + minBuy[0].trade[0]));
-      if (true) {
-
+      if (maxSell[0].trade[1] < minBuy[0].trade[1]) {
+        amount.appendChild(document.createTextNode(maxSell[0].trade[1]));
       } else {
-
+        amount.appendChild(document.createTextNode(minBuy[0].trade[1]));
       }
+      document.querySelector('ul#'+ maxSell[0].appendId + ' li:nth-child(2)').classList.add('highlight');
+      document.querySelector('ul#' + minBuy[0].appendId + ' li:nth-child(2)').classList.add('highlight');
     } else {
       trade.appendChild(document.createTextNode("No Profitable Trades"));
     }
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function delta(tradeOne, tradeTwo) {
     //0.0061 is .1% profit or greater depending on trades as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
-    const diff = 0.000001;
+    const diff = 0.0061;
     let tradeOneNum = parseFloat(tradeOne);
     let tradeTwoNum = parseFloat(tradeTwo);
     const average = (tradeOneNum + tradeTwoNum) / 2;
