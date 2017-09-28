@@ -92,13 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function delta(tradeOne, tradeTwo) {
-    //0.0061 is .1% profit or greater depending on trades as you lose 0.2 to liqui & 0.26 to quadriga & 0.25 taker for poloniex
-    const diff = 0.0061;
-    let tradeOneNum = parseFloat(tradeOne);
-    let tradeTwoNum = parseFloat(tradeTwo);
-    const average = (tradeOneNum + tradeTwoNum) / 2;
-    if (tradeTwoNum >= (tradeOneNum * ((1 + 0.0025)/( 1 - 0.0026))) * 1.001 ) {
+  function delta(sell, buy) {
+    let sellNum = parseFloat(sell);
+    let buyNum = parseFloat(buy);
+    // the * 1.001 means return true if we make 0.1% relative to the sell
+    if (sellNum >= (buyNum * ((1 + 0.0025)/( 1 - 0.0026))) * 1.001 ) {
       return true;
     } else {
       return false;
