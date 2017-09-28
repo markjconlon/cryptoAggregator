@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (delta(maxSell[0].trade[0], minBuy[0].trade[0])) {
       trade.appendChild(document.createTextNode("Sell " + maxSell[0].exchangeName +  " @ " + maxSell[0].trade[0] + " Buy " + minBuy[0].exchangeName + " @ " + minBuy[0].trade[0]));
-      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - parseFloat(minBuy[0].trade[0])) / parseFloat(maxSell[0].trade[0]) }`));
-      target.appendChild(document.createTextNode("0.0061"));
+      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - (parseFloat(minBuy[0].trade[0])) * ((1 + 0.0025)/( 1 - 0.0026))) / parseFloat(maxSell[0].trade[0]) }`));
+      target.appendChild(document.createTextNode("Break Even + 0.001"));
       if (maxSell[0].trade[1] < minBuy[0].trade[1]) {
         amount.appendChild(document.createTextNode(maxSell[0].trade[1]));
       } else {
@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('ul#' + minBuy[0].appendId + ' li:nth-child(2)').classList.add('highlight');
     } else {
       trade.appendChild(document.createTextNode("No Profitable Trades"));
-      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - parseFloat(minBuy[0].trade[0])) / parseFloat(maxSell[0].trade[0]) }`));
-      target.appendChild(document.createTextNode("0.0061"));
+      current.appendChild(document.createTextNode(`${(parseFloat(maxSell[0].trade[0]) - (parseFloat(minBuy[0].trade[0])) * ((1 + 0.0025)/( 1 - 0.0026))) / parseFloat(maxSell[0].trade[0]) }`));
+      target.appendChild(document.createTextNode("Break Even + 0.001"));
     }
   }
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let tradeOneNum = parseFloat(tradeOne);
     let tradeTwoNum = parseFloat(tradeTwo);
     const average = (tradeOneNum + tradeTwoNum) / 2;
-    if ((tradeOneNum - tradeTwoNum) / average >= diff) {
+    if (tradeTwoNum >= (tradeOneNum * ((1 + 0.0025)/( 1 - 0.0026))) * 1.001 ) {
       return true;
     } else {
       return false;
