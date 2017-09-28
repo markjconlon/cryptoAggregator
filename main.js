@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function delta(sell, buy) {
-    let sellNum = parseFloat(sell);
-    let buyNum = parseFloat(buy);
+    let sellRate = parseFloat(sell);
+    let buyRate = parseFloat(buy);
     // the * 1.001 means return true if we make 0.1% relative to the sell
-    if (sellNum >= (buyNum * ((1 + 0.0025)/( 1 - 0.0026))) * 1.001 ) {
+    if (sellRate >= (buyRate * ((1 + 0.0025)/( 1 - 0.0026))) * 1.001 ) {
       return true;
     } else {
       return false;
